@@ -22,6 +22,7 @@ myaliases = {
     'dotf': 'cd $DOTFILES',
     'dotfl': 'cd $DOTFILES.local',
     'fishconf': 'cd ~/.config/fish',
+    'fdot': 'cd ~/.config/fish',
     'xdot': 'cd ~/.config/xonsh',
     'zdot': 'cd ~/.config/zsh',
 }

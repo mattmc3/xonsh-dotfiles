@@ -5,10 +5,10 @@ myaliases = {
     'h': 'history show all | less',
     'c': 'clear',
     #  ls shortcuts
-    'ls': 'ls -GF',
-    'l': 'ls -F',
+    'ls': 'ls -G',
+    'l': 'ls -G',
     'la': 'ls -lAfh',
-    'll': 'ls -lFh',
+    'll': 'ls -lGh',
     'ldot': 'ls -ld .*',
     # macos
     'brewup': 'brew update && brew upgrade',

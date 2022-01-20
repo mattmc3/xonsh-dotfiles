@@ -1,0 +1,1 @@
+$XONSH_HISTORY_BACKEND = 'sqlite'

@@ -1,5 +1,13 @@
 #!/usr/bin/env python
-import aliases
-import magic_enter
-import zoxide
-import starship
+import config
+from nu import *
+
+config.load(
+    "xdg",
+    "aliases",
+    "history",
+    "magic_enter",
+    "prompt",
+    "utils",
+    "zoxide",
+)

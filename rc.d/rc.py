@@ -7,6 +7,7 @@ config.load(
     "environment",
     "aliases",
     "history",
+    "iwd",
     "magic_enter",
     "prompt",
     "utils",

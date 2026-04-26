@@ -164,4 +164,8 @@ XSH.aliases['juno'] = juno_
 XSH.aliases['pyclean'] = pyclean_
 add_one_completer('venv', _venv_completer, 'start')
 add_one_completer('workon', _workon_completer, 'start')
-#XSH.completers.update(old)
+
+if not shutil.which('python') and shutil.which('python3'):
+    XSH.aliases['python'] = 'python3'
+if not shutil.which('pip') and shutil.which('pip3'):
+    XSH.aliases['pip'] = 'pip3'

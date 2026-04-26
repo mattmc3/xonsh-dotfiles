@@ -6,6 +6,7 @@ from pathlib import Path
 from xonsh.built_ins import XSH
 
 XSH.aliases['brewup'] = 'brew update && brew upgrade && brew cleanup'
+XSH.aliases['brewinfo'] = 'brew leaves | xargs brew desc --eval-all'
 XSH.aliases['flushdns'] = 'dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
 XSH.aliases['hidefiles'] = 'defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
 XSH.aliases['showfiles'] = 'defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'

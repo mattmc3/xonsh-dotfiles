@@ -15,9 +15,13 @@ my_aliases = {
     # macos
     'brewup': 'brew update && brew upgrade && brew cleanup',
     # misc
+    'cls': "clear && printf '\\e[3J'",
     'zz': 'exit',
     'nv': 'nvim',
     'xsh': 'xonsh',
+    # url
+    'urlencode': 'python3 -c "import sys,urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))"',
+    'urldecode': 'python3 -c "import sys,urllib.parse; print(urllib.parse.unquote(sys.stdin.read().strip()))"',
     # date/time
     'timestamp': "date '+%Y-%m-%d %H:%M:%S'",
     'datestamp': "date '+%Y-%m-%d'",

@@ -5,6 +5,7 @@ from nu import *
 config.load(
     "xdg",
     "environment",
+    "abbrevs",
     "aliases",
     "dirstack",
     "history",

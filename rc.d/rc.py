@@ -12,6 +12,7 @@ config.load(
     "iwd",
     "magic_enter",
     "prompt",
+    "python_devtools",
     "symmetric_ctrl_z",
     "utils",
     "zoxide",

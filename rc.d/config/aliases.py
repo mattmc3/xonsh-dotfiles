@@ -18,6 +18,12 @@ my_aliases = {
     'zz': 'exit',
     'nv': 'nvim',
     'xsh': 'xonsh',
+    # date/time
+    'timestamp': "date '+%Y-%m-%d %H:%M:%S'",
+    'datestamp': "date '+%Y-%m-%d'",
+    'isodate': "date +%Y-%m-%dT%H:%M:%S%z",
+    'utc': "date -u +%Y-%m-%dT%H:%M:%SZ",
+    'unixepoch': "date +%s",
     # quick dirs
     'dotf': 'cd $DOTFILES',
     'dotfl': 'cd $DOTFILES.local',

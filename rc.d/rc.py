@@ -7,6 +7,7 @@ config.load(
     "environment",
     "abbrevs",
     "aliases",
+    "direnv",
     "dirstack",
     "history",
     "iwd",

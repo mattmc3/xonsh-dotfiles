@@ -6,6 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 from xonsh.built_ins import XSH
+from xonsh.events import events
 
 
 class Clipboard:
@@ -111,9 +112,22 @@ class Clipboard:
         self._copy(str(path).encode())
         print(f"{path} copied to clipboard.")
 
+    def copy_text(self, text: str):
+        """Copy a string directly to the clipboard."""
+        self._ensure()
+        self._copy(text.encode())
+
 
 _clipboard = Clipboard()
 XSH.aliases['clipcopy'] = _clipboard.copy
 XSH.aliases['clippaste'] = _clipboard.paste
 XSH.aliases['copyfile'] = _clipboard.copyfile
 XSH.aliases['copypath'] = _clipboard.copypath
+
+@events.on_ptk_create
+def _setup_copybuffer(bindings, **kwargs):
+    @bindings.add('c-o')
+    def copybuffer(event):
+        text = event.app.current_buffer.text
+        if text:
+            _clipboard.copy_text(text)

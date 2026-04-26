@@ -4,8 +4,11 @@ import subprocess
 import sys
 from pathlib import Path
 from xonsh.built_ins import XSH
-from xonsh.completers.tools import contextual_command_completer, RichCompletion
+from xonsh.completers.completer import add_one_completer
+from xonsh.completers.tools import contextual_command_completer_for, RichCompletion
 
+# Notes:
+#  - consider using xontrib-vox
 
 def _workon_home():
     xdg_data = XSH.env.get('XDG_DATA_HOME', str(Path.home() / '.local' / 'share'))
@@ -91,6 +94,34 @@ def workon_(args):
     venv_(['workon'] + list(args))
 
 
+def deactivate_(_):
+    venv = XSH.env.get('VIRTUAL_ENV')
+    if not venv:
+        print("deactivate: no active virtual environment", file=sys.stderr)
+        return 1
+    venv_bin = str(Path(venv) / 'bin')
+    XSH.env['PATH'] = [p for p in XSH.env['PATH'] if p != venv_bin]
+    del XSH.env['VIRTUAL_ENV']
+
+
+def pyclean_(args):
+    roots = [Path(a) for a in args] if args else [Path('.')]
+    for root in roots:
+        for p in root.rglob('*.pyc'):
+            p.unlink()
+        for p in root.rglob('*.pyo'):
+            p.unlink()
+        for d in root.rglob('__pycache__'):
+            if d.is_dir():
+                shutil.rmtree(d)
+        for d in root.rglob('.mypy_cache'):
+            if d.is_dir():
+                shutil.rmtree(d)
+        for d in root.rglob('.pytest_cache'):
+            if d.is_dir():
+                shutil.rmtree(d)
+
+
 def juno_(args):
     workon_home = _workon_home()
     juno_venv = workon_home / 'juno'
@@ -109,32 +140,28 @@ def juno_(args):
     subprocess.run([jupyter, 'lab', args[0] if args else str(jupyter_prj)])
 
 
-@contextual_command_completer
-def _venv_completer(context):
-    if not context.args or context.args[0].value != 'venv':
-        return
-    prefix = context.prefix
-    if context.arg_index == 1:
+@contextual_command_completer_for('venv')
+def _venv_completer(command):
+    prefix = command.prefix
+    if command.arg_index == 1:
         return {RichCompletion(c, append_space=True) for c in {'create', 'home', 'list', 'remove', 'workon'} if c.startswith(prefix)}
-    if context.arg_index == 2 and len(context.args) > 1:
-        if context.args[1].value in ('home', 'remove', 'workon'):
+    if command.arg_index == 2 and len(command.args) > 1:
+        if command.args[1].value in ('home', 'remove', 'workon'):
             return {c for c in _list_venvs() if c.startswith(prefix)}
         return set()
 
 
-@contextual_command_completer
-def _workon_completer(context):
-    if not context.args or context.args[0].value != 'workon':
-        return
-    if context.arg_index == 1:
-        return {c for c in _list_venvs() if c.startswith(context.prefix)}
+@contextual_command_completer_for('workon')
+def _workon_completer(command):
+    if command.arg_index == 1:
+        return {c for c in _list_venvs() if c.startswith(command.prefix)}
 
 
 XSH.aliases['venv'] = venv_
 XSH.aliases['workon'] = workon_
+XSH.aliases['deactivate'] = deactivate_
 XSH.aliases['juno'] = juno_
-old = dict(XSH.completers)
-XSH.completers.clear()
-XSH.completers['venv'] = _venv_completer
-XSH.completers['workon'] = _workon_completer
-XSH.completers.update(old)
+XSH.aliases['pyclean'] = pyclean_
+add_one_completer('venv', _venv_completer, 'start')
+add_one_completer('workon', _workon_completer, 'start')
+#XSH.completers.update(old)

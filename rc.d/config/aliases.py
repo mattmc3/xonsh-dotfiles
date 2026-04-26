@@ -15,10 +15,19 @@ my_aliases = {
     # macos
     'brewup': 'brew update && brew upgrade && brew cleanup',
     # misc
+    '-': 'cd -',
     'cls': "clear && printf '\\e[3J'",
+    'please': 'sudo',
     'zz': 'exit',
     'nv': 'nvim',
     'xsh': 'xonsh',
+    # disk usage
+    'dud': 'du -d 1 -h',
+    'duf': 'du -sh *',
+    'dux': 'du -d 1 | sort -n',
+    # tar
+    'tarls': 'tar -tvf',
+    'untar': 'tar -xvf',
     # url
     'urlencode': 'python3 -c "import sys,urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))"',
     'urldecode': 'python3 -c "import sys,urllib.parse; print(urllib.parse.unquote(sys.stdin.read().strip()))"',

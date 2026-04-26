@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import platform
 import config
 from nu import *
 
@@ -18,3 +19,6 @@ config.load(
     "utils",
     "zoxide",
 )
+
+if platform.system() == 'Darwin':
+    config.load("macos")

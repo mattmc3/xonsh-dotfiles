@@ -12,8 +12,6 @@ my_aliases = {
     'la': 'ls -lAfh',
     'll': 'ls -lGh',
     'ldot': 'ls -ld .*',
-    # macos
-    'brewup': 'brew update && brew upgrade && brew cleanup',
     # misc
     '-': 'cd -',
     'cls': "clear && printf '\\e[3J'",

@@ -6,6 +6,7 @@ config.load(
     "xdg",
     "environment",
     "aliases",
+    "dirstack",
     "history",
     "iwd",
     "magic_enter",

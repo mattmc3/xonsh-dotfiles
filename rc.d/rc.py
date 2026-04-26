@@ -10,6 +10,7 @@ config.load(
     "iwd",
     "magic_enter",
     "prompt",
+    "symmetric_ctrl_z",
     "utils",
     "zoxide",
 )

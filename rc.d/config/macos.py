@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from config import command
 from xonsh.built_ins import XSH
 
 XSH.aliases['brewup'] = 'brew update && brew upgrade && brew cleanup'
@@ -21,15 +22,16 @@ def _pfd():
     return result.stdout.strip() if result.returncode == 0 else None
 
 
-def pfd_(_):
+@command
+def pfd(_):
     """Print the frontmost Finder directory."""
     path = _pfd()
     if path:
         print(path)
-XSH.aliases['pfd'] = pfd_
 
 
-def pfs_(_):
+@command
+def pfs(_):
     """Print the current Finder selection."""
     result = subprocess.run(
         ['osascript', '-e', '''
@@ -44,48 +46,48 @@ def pfs_(_):
     )
     if result.stderr.strip():
         print(result.stderr.strip())
-XSH.aliases['pfs'] = pfs_
 
 
-def cdf_(_):
+@command
+def cdf(_):
     """Change to the current Finder directory."""
     path = _pfd()
     if path:
         os.chdir(path)
-XSH.aliases['cdf'] = cdf_
 
 
-def ofd_(_):
+@command
+def ofd(_):
     """Open the current directory in Finder."""
     subprocess.run(['open', os.getcwd()])
-XSH.aliases['ofd'] = ofd_
 
 
-def pushdf_(_):
+@command
+def pushdf(_):
     """Push the current Finder directory onto the dir stack."""
     path = _pfd()
     if path:
         os.chdir(path)
-XSH.aliases['pushdf'] = pushdf_
 
 
-def peek_(args):
+@command
+def peek(args):
     """Quick look at a file."""
     if not args:
         print("peek: expected <file>", file=sys.stderr)
         return 1
     subprocess.Popen(['qlmanage', '-p'] + list(args),
                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-XSH.aliases['peek'] = peek_
 
 
-def lmk_(args):
+@command
+def lmk(args):
     """Say a message (or 'Process complete.') via Siri."""
     subprocess.run(['say', ' '.join(args) if args else 'Process complete.'])
-XSH.aliases['lmk'] = lmk_
 
 
-def manp_(args):
+@command
+def manp(args):
     """Read a man page in Preview.app."""
     if not args:
         print("manp: expected <page>", file=sys.stderr)
@@ -95,10 +97,10 @@ def manp_(args):
         return man.returncode
     pdf = subprocess.run(['mandoc', '-T', 'pdf', man.stdout.strip()], capture_output=True)
     subprocess.run(['open', '-fa', 'Preview'], input=pdf.stdout)
-XSH.aliases['manp'] = manp_
 
 
-def mand_(args):
+@command
+def mand(args):
     """Read a man page in Dash.app."""
     if not args:
         print("mand: expected <page>", file=sys.stderr)
@@ -108,10 +110,10 @@ def mand_(args):
     if result.returncode != 0:
         print("mand: Dash is not installed", file=sys.stderr)
         return 2
-XSH.aliases['mand'] = mand_
 
 
-def trash_(args):
+@command
+def trash(args):
     """Move files to the macOS trash."""
     if not args:
         print("trash: usage: trash <files...>", file=sys.stderr)
@@ -129,19 +131,18 @@ def trash_(args):
     if items:
         subprocess.run(['osascript', '-e',
                         f'tell app "Finder" to move {{{", ".join(items)}}} to trash'])
-XSH.aliases['trash'] = trash_
 
 
 def del_(args):
     """Safe delete — moves to trash."""
-    trash_(args)
+    trash(args)
 XSH.aliases['del'] = del_
 
 
-def rmdsstore_(args):
+@command
+def rmdsstore(args):
     """Recursively remove .DS_Store files."""
     roots = [Path(a) for a in args] if args else [Path('.')]
     for root in roots:
         for p in root.rglob('.DS_Store'):
             p.unlink()
-XSH.aliases['rmdsstore'] = rmdsstore_

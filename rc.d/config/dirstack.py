@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+from config import command
 from xonsh.built_ins import XSH
 from xonsh.events import events
 
@@ -18,11 +19,11 @@ def _fmt_dir(path):
         return '~' + path[len(home):]
     return path
 
-def dirh_(args):
+@command
+def dirh(args):
     print(f' 0  {_fmt_dir(os.getcwd())}')
     for i, d in enumerate(_dir_history, 1):
         print(f'{i:2}  {_fmt_dir(d)}')
-XSH.aliases['dirh'] = dirh_
 
 def _make_cd_history(n):
     def _go(args):

@@ -3,6 +3,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from config import command
 from xonsh.built_ins import XSH
 from xonsh.completers.completer import add_one_completer
 from xonsh.completers.tools import contextual_command_completer_for, RichCompletion
@@ -31,7 +32,8 @@ def _list_venvs():
             if d.is_dir() and (d / 'bin' / 'activate').exists()}
 
 
-def venv_(args):
+@command
+def venv(args):
     workon_home = _workon_home()
 
     if not args:
@@ -90,11 +92,13 @@ def venv_(args):
         return 1
 
 
-def workon_(args):
-    venv_(['workon'] + list(args))
+@command
+def workon(args):
+    venv(['workon'] + list(args))
 
 
-def deactivate_(_):
+@command
+def deactivate(_):
     venv = XSH.env.get('VIRTUAL_ENV')
     if not venv:
         print("deactivate: no active virtual environment", file=sys.stderr)
@@ -104,7 +108,8 @@ def deactivate_(_):
     del XSH.env['VIRTUAL_ENV']
 
 
-def pyclean_(args):
+@command
+def pyclean(args):
     roots = [Path(a) for a in args] if args else [Path('.')]
     for root in roots:
         for p in root.rglob('*.pyc'):
@@ -122,7 +127,8 @@ def pyclean_(args):
                 shutil.rmtree(d)
 
 
-def juno_(args):
+@command
+def juno(args):
     workon_home = _workon_home()
     juno_venv = workon_home / 'juno'
 
@@ -157,11 +163,6 @@ def _workon_completer(command):
         return {c for c in _list_venvs() if c.startswith(command.prefix)}
 
 
-XSH.aliases['venv'] = venv_
-XSH.aliases['workon'] = workon_
-XSH.aliases['deactivate'] = deactivate_
-XSH.aliases['juno'] = juno_
-XSH.aliases['pyclean'] = pyclean_
 add_one_completer('venv', _venv_completer, 'start')
 add_one_completer('workon', _workon_completer, 'start')
 

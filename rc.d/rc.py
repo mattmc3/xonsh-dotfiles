@@ -12,8 +12,8 @@ config.load(
     "clipboard",
     "describe",
     "direnv",
+    "directory",
     "git",
-    "dirstack",
     "history",
     "iwd",
     "magic_enter",
@@ -24,5 +24,5 @@ config.load(
     "zoxide",
 )
 
-if platform.system() == 'Darwin':
+if platform.system() == "Darwin":
     config.load("macos")

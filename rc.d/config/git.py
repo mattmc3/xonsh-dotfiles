@@ -3,9 +3,12 @@ import argparse
 import os
 import subprocess
 import sys
+import urllib.request
 from pathlib import Path
 
 from config import command
+from xonsh.completers.completer import add_one_completer
+from xonsh.completers.tools import contextual_command_completer_for
 
 
 def _git_config(key, default=None):
@@ -100,3 +103,56 @@ def cloner(args):
         os.chdir(dest)
     else:
         return result.returncode
+
+
+# --- gi ---
+
+_gi_cache = None
+_GI_BASE = 'https://www.toptal.com/developers/gitignore/api'
+_GI_HEADERS = {'User-Agent': 'xonsh/gi'}
+
+
+def _gi_get(url, timeout=5):
+    req = urllib.request.Request(url, headers=_GI_HEADERS)
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read().decode()
+
+
+def _gi_list():
+    global _gi_cache
+    if _gi_cache is None:
+        try:
+            raw = _gi_get(f'{_GI_BASE}/list').replace('\r', '').replace('\n', ',')
+            _gi_cache = sorted(t.strip() for t in raw.split(',') if t.strip())
+        except Exception:
+            _gi_cache = []
+    return _gi_cache
+
+
+@command
+def gi(args):
+    """Fetch a .gitignore template from gitignore.io.
+
+    Usage: gi <type>[,<type>...] [> .gitignore]
+    """
+    if not args:
+        print("gi: expected <type>[,<type>...]", file=sys.stderr)
+        return 1
+    types = ','.join(args)
+    try:
+        print(_gi_get(f'{_GI_BASE}/{types}'))
+    except urllib.error.HTTPError as e:
+        print(f"gi: {e}", file=sys.stderr)
+        return 1
+
+
+@contextual_command_completer_for('gi')
+def _gi_completer(command):
+    prefix = command.prefix
+    templates = _gi_list()
+    if ',' in prefix:
+        before, partial = prefix.rsplit(',', 1)
+        return {f'{before},{t}' for t in templates if t.startswith(partial)}
+    return {t for t in templates if t.startswith(prefix)}
+
+add_one_completer('gi', _gi_completer, 'start')

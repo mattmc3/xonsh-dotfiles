@@ -9,6 +9,7 @@ config.load(
     "abbrevs",
     "aliases",
     "clipboard",
+    "describe",
     "direnv",
     "dirstack",
     "history",

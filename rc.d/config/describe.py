@@ -9,33 +9,30 @@ from xonsh.built_ins import XSH
 
 def _from_history(name):
     """Search xonsh SQLite history for the most recent definition of name in this session."""
-    if XSH.env.get('XONSH_HISTORY_BACKEND', '').lower() != 'sqlite':
+    if XSH.env.get("XONSH_HISTORY_BACKEND", "").lower() != "sqlite":
         return None
 
-    hist = getattr(XSH, 'history', None)
-    filename = (
-        XSH.env.get('XONSH_HISTORY_FILE')
-        or getattr(hist, 'filename', None)
-    )
+    hist = getattr(XSH, "history", None)
+    filename = XSH.env.get("XONSH_HISTORY_FILE") or getattr(hist, "filename", None)
     if not filename:
         return None
 
-    start_time = getattr(hist, 'start_time', None)
+    start_time = getattr(hist, "start_time", None)
     conn = None
     try:
         conn = sqlite3.connect(str(filename))
         if start_time:
             cursor = conn.execute(
                 "SELECT inp FROM xonsh_history WHERE inp LIKE ? AND tsb >= ? ORDER BY tsb DESC LIMIT 20",
-                (f'def {name}%', start_time)
+                (f"def {name}%", start_time),
             )
         else:
             cursor = conn.execute(
                 "SELECT inp FROM xonsh_history WHERE inp LIKE ? ORDER BY tsb DESC LIMIT 20",
-                (f'def {name}%',)
+                (f"def {name}%",),
             )
         for (inp,) in cursor:
-            if re.match(rf'\s*def\s+{re.escape(name)}\s*\(', inp):
+            if re.match(rf"\s*def\s+{re.escape(name)}\s*\(", inp):
                 return inp.strip()
     except Exception:
         pass
@@ -67,7 +64,7 @@ def describe(args):
     if fn is None or not callable(fn):
         print(f"describe: '{name}' is not a function", file=sys.stderr)
         return 1
-    fn = getattr(fn, 'func', fn)
+    fn = getattr(fn, "func", fn)
     try:
         print(inspect.getsource(fn))
     except OSError:

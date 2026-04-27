@@ -5,7 +5,5 @@ XSH.env["XONSH_HISTORY_BACKEND"] = "sqlite"
 
 # Optional: explicit history file (XDG-clean)
 XSH.env["XONSH_HISTORY_FILE"] = (
-    __import__("pathlib")
-    .Path("~/.local/share/xonsh/xonsh-history.db")
-    .expanduser()
+    __import__("pathlib").Path("~/.local/share/xonsh/xonsh-history.db").expanduser()
 )

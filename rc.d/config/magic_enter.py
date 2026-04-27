@@ -8,6 +8,7 @@ XSH.env["MAGIC_ENTER_GIT_COMMAND"] = ["git", "status", "-sb", "."]
 XSH.env["MAGIC_ENTER_OTHER_COMMAND"] = ["ls", "-lahF", "."]
 XSH.env["MAGIC_ENTER_RUN_COMMAND"] = None
 
+
 @events.on_transform_command
 def magic_enter(cmd, **_):
     """Run a command when Enter is pressed on an empty line."""
@@ -25,6 +26,7 @@ def magic_enter(cmd, **_):
         else:
             XSH.env["MAGIC_ENTER_RUN_COMMAND"] = XSH.env["MAGIC_ENTER_OTHER_COMMAND"]
     return cmd
+
 
 @events.on_pre_prompt
 def run_magic_enter():

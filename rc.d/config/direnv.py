@@ -6,10 +6,11 @@ from pathlib import Path
 from xonsh.built_ins import XSH
 from xonsh.events import events
 
-if shutil.which('direnv'):
+if shutil.which("direnv"):
+
     def _direnv():
         result = subprocess.run(
-            ['direnv', 'export', 'json'],
+            ["direnv", "export", "json"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -35,9 +36,9 @@ if shutil.which('direnv'):
 
     @events.on_chdir
     def _direnv_chdir(olddir, newdir, **kwargs):
-        direnv_dir = XSH.env.get('DIRENV_DIR')
+        direnv_dir = XSH.env.get("DIRENV_DIR")
         if direnv_dir is not None:
-            direnv_path = Path(direnv_dir.lstrip('-'))
+            direnv_path = Path(direnv_dir.lstrip("-"))
             if not set(direnv_path.parts).issubset(Path(newdir).absolute().parts):
                 _direnv()
         else:

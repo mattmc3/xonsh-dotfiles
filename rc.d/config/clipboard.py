@@ -21,7 +21,7 @@ def clipcopy(args, stdin=None):
 @command
 def clippaste(_):
     """Paste clipboard contents to stdout."""
-    print(pyperclip.paste(), end='')
+    print(pyperclip.paste(), end="")
 
 
 @command
@@ -41,14 +41,14 @@ def copyfile(args):
 @command
 def copypath(args):
     """Copy the absolute path of a file or directory to the clipboard."""
-    path = Path(args[0] if args else '.').absolute()
+    path = Path(args[0] if args else ".").absolute()
     pyperclip.copy(str(path))
     print(f"{path} copied to clipboard.")
 
 
 @events.on_ptk_create
 def _setup_copybuffer(bindings, **kwargs):
-    @bindings.add('c-o')
+    @bindings.add("c-o")
     def copybuffer(event):
         text = event.app.current_buffer.text
         if text:

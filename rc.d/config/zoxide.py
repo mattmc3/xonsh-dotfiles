@@ -2,6 +2,7 @@
 import subprocess
 from xonsh.built_ins import XSH
 
+
 def _init_zoxide():
     try:
         result = subprocess.run(
@@ -17,5 +18,6 @@ def _init_zoxide():
         return
 
     XSH.execer.exec(result.stdout, glbs=XSH.ctx, locs=XSH.ctx, filename="zoxide")
+
 
 _init_zoxide()

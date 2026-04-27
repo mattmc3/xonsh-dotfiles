@@ -11,9 +11,11 @@ if shutil.which('direnv'):
         result = subprocess.run(
             ['direnv', 'export', 'json'],
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
             text=True,
         )
+        if result.stderr.strip():
+            print(result.stderr.strip(), flush=True)
         if not result.stdout.strip():
             return
         with XSH.env.swap(UPDATE_OS_ENVIRON=True):
@@ -27,6 +29,10 @@ if shutil.which('direnv'):
     def _direnv_post_init(**kwargs):
         _direnv()
 
+    @events.on_pre_prompt
+    def _direnv_pre_prompt(**kwargs):
+        _direnv()
+
     @events.on_chdir
     def _direnv_chdir(olddir, newdir, **kwargs):
         direnv_dir = XSH.env.get('DIRENV_DIR')
@@ -36,7 +42,3 @@ if shutil.which('direnv'):
                 _direnv()
         else:
             _direnv()
-
-    @events.on_postcommand
-    def _direnv_postcommand(cmd, rtn, out, ts, **kwargs):
-        _direnv()

@@ -2,6 +2,7 @@
 import shutil
 import subprocess
 import sys
+import venv as _venv
 from pathlib import Path
 from config import command
 from xonsh.built_ins import XSH
@@ -50,7 +51,7 @@ def venv(args):
         if venv_path.exists():
             print(f"venv: already exists: '{rest[0]}'", file=sys.stderr)
             return 1
-        subprocess.run(['python3', '-m', 'venv', str(venv_path)], check=True)
+        _venv.create(venv_path, with_pip=True)
 
     elif cmd == 'list':
         workon_home.mkdir(parents=True, exist_ok=True)
@@ -74,7 +75,7 @@ def venv(args):
             return 1
         venv_path = workon_home / rest[0]
         if not venv_path.exists():
-            subprocess.run(['python3', '-m', 'venv', str(venv_path)], check=True)
+            _venv.create(venv_path, with_pip=True)
         _activate(venv_path)
 
     elif cmd == 'remove':

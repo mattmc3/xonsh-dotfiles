@@ -19,7 +19,7 @@ pipx install 'xonsh[full]'
 To install deps:
 
 ```shell
-pipx inject xonsh pandas duckdb
+pipx inject xonsh pandas duckdb pyperclip
 ```
 
 To install dotfiles:

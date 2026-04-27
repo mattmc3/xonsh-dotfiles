@@ -11,6 +11,7 @@ config.load(
     "clipboard",
     "describe",
     "direnv",
+    "git",
     "dirstack",
     "history",
     "iwd",

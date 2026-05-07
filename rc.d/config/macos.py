@@ -157,13 +157,7 @@ def trash(args):
             ]
         )
 
-
-def del_(args):
-    """Safe delete — moves to trash."""
-    trash(args)
-
-
-XSH.aliases["del"] = del_
+XSH.aliases["del"] = trash
 
 
 @command
